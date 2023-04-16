@@ -1,0 +1,6 @@
+dash-cell.cell--selected.focused {
+    background-color: #ffffff !important;
+    border-radius: 5px;
+    color: #000000;
+    font-weight : bold;
+}

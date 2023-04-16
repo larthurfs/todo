@@ -1,0 +1,321 @@
+{% extends 'base.html' %}
+{% load custom_filter_tags %}
+{% load static %}
+
+{% block main %}
+
+
+
+{% include 'message.html' %}
+
+              <!-- end topbar -->
+               <!-- dashboard inner -->
+               <div class="container-fluid">
+                     <div class="row column_title">
+                        <div class="col-md-12">
+                           <div class="page_title">
+                                 <h2>Lista de Atividades</h2>
+                           </div>
+
+                        </div>
+                     </div>
+<div class="row column1">
+ <nav arial-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" selected><a class="btn btn-light" href="{% url 'task_list' %}">Lista</a></li>
+            <li class="breadcrumb-item"><a class="btn btn-light" href="{% url 'task_calendario' %}"> Calendário</a></li>
+            <li class="breadcrumb-item">
+                <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-expanded="false">+ Ações</button>
+                                    <div class="dropdown-menu" x-placement="top-start" style="position: absolute; transform: translate3d(0px, -2px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                                      <button type="button" class="dropdown-item" data-toggle="modal" data-target="#myModal">Criar Atividade</button>
+                                                      <a type="button" class="dropdown-item" href="{% url 'relatorio_download' %}">Emitir Relatório</a>
+                                    </div>
+            </li>
+        </ol>
+</nav>
+
+<div style="position: absolute; transform: translate3d(0px, -2px, 0px); top: 0px; left: 0px; will-change: transform;">
+   <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Criar Atividade</button>
+</div>
+
+
+                   <div class="full price_table padding_infor_info">
+
+                                 <div class="row">
+                                    <div class="col-lg-12">
+                                       <div class="table-responsive-sm">
+                                          <table class="table table-striped projects" id="emp-table">
+                                             <thead class="thead-dark">
+                                                <tr>
+                                                   <th col-index = 1>Tarefa
+                                                       <select class="table-filter" onchange="filter_rows()">
+                                                           <option value="all"></option>
+                                                       </select>
+                                                   </th>
+                                                   <th style="width: 30%" col-index = 2>Descrição</th>
+                                                   <th col-index = 3>Data Início
+                                                        <select class="table-filter" onchange="filter_rows()">
+                                                           <option value="all"></option>
+                                                       </select>
+                                                   </th>
+                                                   <th  col-index = 4>Data Fim
+                                                        <select class="table-filter" onchange="filter_rows()">
+                                                           <option value="all"></option>
+                                                       </select>
+                                                   </th>
+                                                   <th col-index = 5>Status
+                                                       <select class="table-filter" onchange="filter_rows()">
+                                                           <option value="all"></option>
+                                                       </select>
+                                                   </th>
+                                                   <th col-index = 6>Semana
+                                                        <select class="table-filter" onchange="filter_rows()">
+                                                           <option value="all"></option>
+                                                       </select>
+                                                   </th>
+                                                   <th col-index = 7><center>Controles</center></th>
+
+
+                                                </tr>
+                                             </thead>
+                                             <tbody>
+                                                {% for task in tasks_page %}
+                                                <tr>
+
+
+                                                   <td>
+                                                      <a>{{ task.task_name }}</a>
+                                                   </td>
+                                                   <td>
+                                                        <a>{{ task.descricao }}</a>
+                                                   </td>
+                                                   <td>
+                                                      <a>{{ task.data_inicio|date:"d/m/y" }}</a>
+                                                   </td>
+                                                   <td>
+                                                      <a>{{ task.data_fim|date:"d/m/y" }}</a>
+                                                   </td>
+                                                    <td>
+                                                      <a>{{ task.status }}</a>
+                                                   </td>
+                                                    <td>
+                                                      <a>{{ task.data_inicio| semana_atividade }}</a>
+                                                   </td>
+                                                    <td>
+                                                      <button type="button" class="btn btn-primary"  onclick="atividade({{task.id}})" > <span class="fa fa-edit"></span> </button>
+                                                      <button type="button" class="btn btn-info" onclick="atividadechange({{task.id}})"> <span class="fa fa-check"></span> </button>
+                                                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalConfirmDelet" onclick="atividadedelet({{task.id}})" > <span class="fa fa-trash"></span></button>
+
+                                                   </td>
+
+                                                </tr>
+
+                                             {% endfor %}
+
+                                             </tbody>
+
+                                          </table>
+
+                                       </div>
+                                    </div>
+                                     {% include 'paginator.html' with page=posts %}
+                                 </div>
+                              </div>
+
+                </div>
+
+                   </div>
+                  <!-- footer -->
+                  <div class="container-fluid">
+                     <div class="footer">
+                        <p></p>
+                     </div>
+                  </div>
+               </div>
+               <!-- end dashboard inner -->
+            </div>
+         </div>
+
+      </div>
+
+
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <form name="form" id="formtask" class="form-horizontal" method="post" action="{% url 'task_new' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <!-- Modal content-->
+    <div class="modal-content" >
+      <div class="modal-header">
+          <h3 class="modal-title">Adicionar Tarefa </h3>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+              <input type="file" name="arquivo"  class="file-upload-default">
+              <input type="hidden" name="project_id"  id="project_id" value="{{projeto.id}}">
+              {{ form_task }}
+          </div>
+      </div>
+      <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </div>
+    </form>
+  </div>
+</div>
+
+<div id="myModaledit" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <form name="form" id="formtaskedit" class="form-horizontal" method="post" action="{% url 'task_edit' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <!-- Modal content-->
+    <div class="modal-content" >
+      <div class="modal-header">
+          <h3 class="modal-title">Editar Atividade </h3>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+              <input type="file" name="arquivo" class="file-upload-default">
+              <input type="hidden" name="task_id" id="task_id_edit" value="">
+              <label for="id_task_name_edit">Nome da Atividade:</label>
+              <input type="text" name="task_name" placeholder="Atividade" required="" id="id_task_name_edit">
+              <label for="id_descricao_edit">Descricao:</label>
+              <textarea name="descricao" cols="40" rows="10" id="id_descricao_edit"></textarea>
+              <label for="id_data_inicio_edit">Data Início:</label>
+              <input type="date" name="data_inicio" required="" id="id_data_inicio_edit">
+              <label for="id_data_fim_edit">Data Fim:</label>
+              <input type="date" name="data_fim" required="" id="id_data_fim_edit">
+
+          </div>
+      </div>
+      <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </div>
+    </form>
+  </div>
+</div>
+
+<div id="myModalChange" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <form name="form" id="formchangetask" class="form-horizontal" method="post" action="{% url 'task_status_change' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <!-- Modal content-->
+    <div class="modal-content" >
+      <div class="modal-header">
+          <h3 class="modal-title">Avanço Status </h3>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+              <input type="file" name="arquivo"  class="file-upload-default">
+              <input type="hidden" name="task_id_change"  id="task_id_change" value="">
+                   {{form_change}}
+          </div>
+      </div>
+      <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </div>
+    </form>
+  </div>
+</div>
+
+<div id="myModalConfirmDelet" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <form name="form" id="formdelettask" class="form-horizontal" method="post" action="{% url 'task_deletar' %}">
+    {% csrf_token %}
+    <!-- Modal content-->
+    <div class="modal-content" >
+      <div class="modal-header">
+          <h3 class="modal-title">Deletar Atividade</h3>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+              <input type="hidden" name="task_id_delet"  id="task_id_delet" value="">
+                <h3>Você deseja deletar essa atividade? Essa ação não tem volta!</h3>
+          </div>
+      </div>
+      <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Deletar Atividade</button>
+      </div>
+    </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+{% endblock %}
+{% block script %}
+
+
+<script src="{% static 'js/filter_tables.js' %}"></script>
+
+
+<script>
+    function atividade(id){
+        console.log(id);
+        $.ajax({
+            url: "/atividades/task_edit_ajax/" + id,
+            async: true,
+            type: 'GET',
+            success: function(data) {
+                console.log(data);
+
+                $('#formtaskedit').trigger("reset");
+
+                $('#id_task_name_edit').val(data.nome);
+                $('#id_descricao_edit').val(data.descricao);
+
+                $('#id_data_inicio_edit').val(data.di);
+                $('#id_data_fim_edit').val(data.df);
+                $('#task_id_edit').val(id);
+
+                $('#myModaledit').modal('show');
+
+            }
+        });
+    };
+
+    function atividadechange(id){
+       $.ajax({
+            url: "/atividades/task_status_change_ajax/" + id,
+            async: true,
+            type: 'GET',
+            success: function(data) {
+                console.log(data);
+
+                $('#formchangetask').trigger("reset");
+
+                $('#id_status').val(data.status);
+                $('#id_data_fim_real').val(data.dfr);
+                $('#task_id_change').val(id);
+
+                $('#myModalChange').modal('show');
+
+            }
+        });
+    };
+
+    function atividadedelet(id){
+      document.getElementById("task_id_delet").value = id;
+      console.log(id)
+    };
+
+</script>
+
+<script>
+    window.onload = () => {
+            console.log(document.querySelector("#emp-table > tbody > tr:nth-child(1) > td:nth-child(2) ").innerHTML);
+        };
+
+        getUniqueValuesFromColumn()
+</script>
+{% endblock  %}
