@@ -13,7 +13,7 @@ from datetime import timedelta, date, datetime
 # Your Account SID from twilio.com/console
 account_sid = "AC9d1cd5a1a166c27d2aada06ba0ee817b"
 # Your Auth Token from twilio.com/console
-auth_token  = "d804de956eda6401604689e894df7579"
+auth_token  = "2354bb7bdba9425989d98d05972ac4f6"
 
 client = Client(account_sid, auth_token)
 
@@ -165,7 +165,7 @@ def bot_whatsapp(request):
 
 
 
-@csrf_exempt
+
 def bot_cria_tarefa(message, user):
 
     nome = re.search(r'Nome:(.*?)\n', message)
