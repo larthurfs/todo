@@ -163,7 +163,7 @@ def bot_whatsapp(request):
         )
 
 
-
+    return HttpResponse("hi")
 
 
 def bot_cria_tarefa(message, user):
