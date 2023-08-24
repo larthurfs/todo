@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+   <head>
+      <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+      <!-- site metas -->
+      <title>Todo - Neurondat</title>
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <!-- site icon -->
+      <link rel="icon" href="{% static 'images/favicon.png' %}" type="image/png" />
+      <!-- bootstrap css -->
+      <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+      <!-- site css -->
+      <link rel="stylesheet" href="{% static 'modal.css' %}" />
+      <link rel="stylesheet" href="{% static 'style.css' %}" />
+      <link rel="stylesheet" href="{% static 'style_dash.css' %}" />
+
+      <!-- responsive css -->
+      <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
+
+      <!-- font -->
+      <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}" />
+      <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" />
+      <link rel="stylesheet" href="{% static 'css/bootstrap-select.css' %}" />
+      <!-- scrollbar css -->
+      <link rel="stylesheet" href="{% static 'css/perfect-scrollbar.css' %}" />
+
+      <!-- calendar
+      <link href="{% static 'calender/main.css' %}" rel="stylesheet" />-->
+
+
+   {% block css %}
+   {% endblock css %}
+
+      <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+      <script src="{% static 'js/popper.min.js' %}"></script>
+      <script src="{% static 'js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'js/perfect-scrollbar.min.js' %}"></script>
+      <script src="{% static 'js/file-upload.js' %}"></script>
+
+      {% block jsadd %}
+      {% endblock jsadd %}
+
+   </head>
+   <body class="dashboard dashboard_1">
+      <div class="full_container">
+         <div class="inner_container">
+            <!-- Sidebar  -->
+            <nav id="sidebar">
+               <div class="sidebar_blog_1">
+                  <div class="sidebar-header">
+                     <div class="logo_section">
+                        <a href="{% url 'home' %}"><img class="logo_icon img-responsive" src="{% static 'images/logo/logo_icon.png' %}" alt="#" /></a>
+                     </div>
+                  </div>
+                  <div class="sidebar_user_info">
+                     <div class="icon_setting"></div>
+                     <div class="user_profle_side">
+                        {% if profile.user_foto %}
+                        <div class="user_img"><img class="img-responsive" src="{{ profile.user_foto.url }}" alt="#" /></div>
+                        {% else %}
+                        <div class="user_img"><img class="img-responsive" src="{% static 'images/layout_img/user_img.png' %}" alt="#" /></div>
+                        {% endif %}
+
+                        <div class="user_info">
+                           <h6 style="color:Navy" >{{profile.nome}}</h6>
+
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="sidebar_blog_2">
+                  <h4>Todo - Neurondat</h4>
+
+                  <ul class="list-unstyled components">
+
+                     <li class="active">
+                        <a href="{% url 'home' %}" aria-expanded="false" ><i class="fa fa-bar-chart Blue_color"></i> <span>Dashboard</span></a>
+                        <a href="#atividades" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-check-square-o Blue_color"></i> <span>Atividades</span></a>
+                        <ul class="collapse list-unstyled" id="atividades">
+                           <li>
+                              <a href="{% url 'task_list' %}">> <span>Lista Atividades</span></a>
+                           </li>
+                           <li>
+                              <a href="{% url 'task_calendario' %}">> <span>Calendário Atividades</span></a>
+                           </li>
+                        </ul>
+                     </li>
+
+                  </ul>
+               </div>
+            </nav>
+            <!-- end sidebar -->
+            <!-- right content -->
+            <div id="content">
+               <!-- topbar -->
+               <div class="topbar">
+                  <nav class="navbar navbar-expand-lg navbar-light">
+                     <div class="full">
+                        <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
+                        <div class="logo_section">
+                           <a href="{% url 'home' %}"><img class="img-responsive" src="{% static 'images/logo/logo.png' %}" alt="#" /></a>
+                        </div>
+                        <div class="right_topbar">
+                           <div class="icon_info">
+
+                              <ul class="user_profile_dd">
+                                 <li>
+                                    {% if profile.user_foto %}
+                                    <a class="dropdown-toggle" data-toggle="dropdown"><img class="img-responsive rounded-circle" src="{{ profile.user_foto.url }}" alt="#" /><span class="name_user">{{profile.nome}}</span></a>
+                                    {% else %}
+                                    <a class="dropdown-toggle" data-toggle="dropdown"><img class="img-responsive rounded-circle" src="{% static 'images/layout_img/user_img.png' %}" alt="#" /><span class="name_user">{{profile.nome}}</span></a>
+                                    {% endif %}
+                                    <div class="dropdown-menu">
+                                       <a class="dropdown-item" href="{% url 'profile_detail' %}">Perfil</a>
+                                       <a class="dropdown-item" href="{% url 'logout' %}"><span>Logout</span> <i class="fa fa-sign-out"></i></a>
+                                    </div>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                  </nav>
+               </div>
+               <!-- end topbar -->
+               <!-- dashboard inner -->
+
+               <div class="midde_cont">
+                  {% block main %}
+
+                  {% endblock main %}
+               </div>
+               <!-- end dashboard inner -->
+            </div>
+         </div>
+      </div>
+      <!-- jQuery -->
+
+
+
+      <script>
+         var ps = new PerfectScrollbar('#sidebar');
+      </script>
+      <!-- custom js -->
+      <!--<script src="{% static 'js/custom.js' %}"></script>-->
+
+      <script src="https://cdn.plot.ly/plotly-lastest.min.js"></script>
+
+
+
+
+
+   {% block script %}
+   {% endblock script %}
+   </body>
+</html>

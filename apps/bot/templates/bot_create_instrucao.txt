@@ -1,0 +1,14 @@
+Você precisa preencher o template disponibilizado abaixo conforme demonstrado nesse exemplo.
+Importante as datas devem está no formato de dia, mês e ano!
+O ano deve conter os 4(quatros) dígitos.
+
+
+Criar atividade
+
+Nome: Nome da atividade
+
+Descrição: Descrição da atividade
+
+Data Início: 12/12/2022
+
+Data Fim: 12/12/2022
