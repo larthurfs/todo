@@ -1,7 +1,0 @@
-_______________________________
-Atividade: {{ task.task_name }}
-Descrição: {{ task.descricao }}
-Data Início: {{ task.data_inicio|date:"d/m/y" }}
-Data Fim: {{ task.data_fim|date:"d/m/y" }}
-Status: {{ task.status }}
-_______________________________

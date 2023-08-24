@@ -1,7 +1,0 @@
-{{profile.nome}}
-
-Gostei muito de conversar com você!
-
-Quando quiser falar novamente comigo, basta digitar um "oi".
-
-Pode acreditar: vou estar sempre aqui pra te atender!
